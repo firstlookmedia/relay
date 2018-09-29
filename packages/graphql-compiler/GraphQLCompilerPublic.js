@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -43,17 +43,14 @@ const nullthrows = require('./util/nullthrowsOSS');
 
 const {SourceControlMercurial} = require('./codegen/SourceControl');
 
+export type {Filesystem} from './codegen/CodegenDirectory';
 export type {
-  GetWriter,
-  GetWriterOptions,
+  WriteFiles,
+  WriteFilesOptions,
   ParserConfig,
   WriterConfig,
 } from './codegen/CodegenRunner';
-export type {
-  CompileResult,
-  File,
-  FileWriterInterface,
-} from './codegen/CodegenTypes';
+export type {CompileResult, File} from './codegen/CodegenTypes';
 export type {FileFilter, WatchmanExpression} from './codegen/CodegenWatcher';
 export type {SourceControl} from './codegen/SourceControl';
 export type {IRTransform} from './core/GraphQLCompilerContext';

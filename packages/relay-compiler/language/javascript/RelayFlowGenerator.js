@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -254,8 +254,7 @@ function createVisitor(options: TypeGeneratorOptions) {
     existingFragmentNames: options.existingFragmentNames,
     generatedFragments: new Set(),
     generatedInputObjectTypes: {},
-    inputFieldWhiteList: options.inputFieldWhiteList,
-    relayRuntimeModule: options.relayRuntimeModule,
+    optionalInputFields: options.optionalInputFields,
     usedEnums: {},
     usedFragments: new Set(),
     useHaste: options.useHaste,
@@ -334,7 +333,7 @@ function createVisitor(options: TypeGeneratorOptions) {
         return t.program([
           ...getFragmentImports(state),
           ...getEnumDefinitions(state),
-          importTypes(['FragmentReference'], state.relayRuntimeModule),
+          importTypes(['FragmentReference'], 'relay-runtime'),
           refType,
           exportType(node.name, type),
         ]);

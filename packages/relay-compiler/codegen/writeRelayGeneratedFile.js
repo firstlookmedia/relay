@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -29,7 +29,6 @@ async function writeRelayGeneratedFile(
   typeText: string,
   persistQuery: ?(text: string) => Promise<string>,
   platform: ?string,
-  relayRuntimeModule: string,
   sourceHash: string,
   extension: string,
 ): Promise<?GeneratedNode> {
@@ -100,13 +99,13 @@ async function writeRelayGeneratedFile(
         case RelayConcreteNode.REQUEST:
           const operationText = generatedNode.text;
           devOnlyProperties.text = operationText;
-          const queryId = await _persistQuery(nullthrows(operationText));
+          const documentId = await _persistQuery(nullthrows(operationText));
           queryMap = {};
-          queryMap[queryId] = operationText;
+          queryMap[documentId] = operationText;
           generatedNode = {
             ...generatedNode,
             text: null,
-            id: queryId,
+            id: documentId,
           };
           break;
         case RelayConcreteNode.BATCH_REQUEST:
@@ -118,15 +117,15 @@ async function writeRelayGeneratedFile(
             requests: await Promise.all(
               generatedNode.requests.map(async request => {
                 const requestOperationText = request.text;
-                const queryId = await _persistQuery(
+                const documentId = await _persistQuery(
                   nullthrows(requestOperationText),
                 );
                 queryMap = {};
-                queryMap[queryId] = requestOperationText;
+                queryMap[documentId] = requestOperationText;
                 return {
                   ...request,
                   text: null,
-                  id: queryId,
+                  id: documentId,
                 };
               }),
             ),
@@ -151,7 +150,6 @@ async function writeRelayGeneratedFile(
     hash: hash ? `@relayHash ${hash}` : null,
     concreteText: dedupeJSONStringify(generatedNode),
     devOnlyAssignments,
-    relayRuntimeModule,
     sourceHash,
   });
 

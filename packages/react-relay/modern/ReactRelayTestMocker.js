@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -17,7 +17,6 @@ const warning = require('warning');
 
 const {Network, isRelayModernEnvironment} = require('relay-runtime');
 
-import type {ConcreteOperationDefinition} from '../classic/query/ConcreteQuery';
 import type {
   CacheConfig,
   GraphQLResponse,
@@ -28,22 +27,20 @@ import type {
   Variables,
 } from 'relay-runtime';
 
-type DataWriteConfig = {
+export type DataWriteConfig = {
   query: RequestNode,
   variables: Variables,
   payload: GraphQLResponse,
 };
 
-type NetworkWriteConfig = {
+export type NetworkWriteConfig = {
   query: RequestNode,
   variables?: Variables,
   payload: GraphQLResponse | (Variables => GraphQLResponse),
 };
 
-type RequestType = RequestNode | ConcreteOperationDefinition;
-
 type PendingFetch = {
-  request: RequestType,
+  request: RequestNode,
   variables?: Variables,
   cacheConfig: ?CacheConfig,
   ident: string,
@@ -104,7 +101,7 @@ class ReactRelayTestMocker {
    * @returns a string which can later be used to uniquely identify this query
    * in the list of pending queries
    */
-  static getIdentifier(request: RequestType): string {
+  static getIdentifier(request: RequestNode): string {
     return request.name;
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -32,7 +32,8 @@ export type Variables = {[name: string]: $FlowFixMe};
  * Generated operation flow types are subtypes of this.
  */
 export type OperationType = {|
-  +variables: mixed,
+  // TODO(T33395812) Make this an open object type
+  +variables: Variables,
   +response: mixed,
 |};
 

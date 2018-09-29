@@ -1,6 +1,6 @@
 {
   "name": "graphql-compiler",
-  "version": "1.6.2",
+  "version": "1.7.0-rc.1",
   "license": "MIT",
   "description": "A Code-generation toolkit for GraphQL",
   "main": "GraphQLCompilerPublic.js",
@@ -10,6 +10,6 @@
     "immutable": "~3.7.6"
   },
   "peerDependencies": {
-    "graphql": "^0.13.0"
+    "graphql": "^14.0.0"
   }
 }

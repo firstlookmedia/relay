@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,7 +39,7 @@ import type {DocumentNode, GraphQLSchema} from 'graphql';
 function validateOrThrow(
   document: DocumentNode,
   schema: GraphQLSchema,
-  rules: Array<Function>,
+  rules: $ReadOnlyArray<Function>,
 ): void {
   const validationErrors = validate(schema, document, rules);
   if (validationErrors && validationErrors.length > 0) {

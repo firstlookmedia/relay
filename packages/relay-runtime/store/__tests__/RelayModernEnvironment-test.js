@@ -1,10 +1,11 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
  * @format
+ * @flow
  * @emails oncall+relay
  */
 
@@ -147,6 +148,9 @@ describe('RelayModernEnvironment', () => {
       environment.applyUpdate({
         storeUpdater: proxyStore => {
           const user = proxyStore.get(id);
+          if (!user) {
+            throw new Error('Expected user to be in the store');
+          }
           user.setValue(name, 'name');
         },
       });
@@ -398,8 +402,8 @@ describe('RelayModernEnvironment', () => {
       `,
       ));
       operationSelector = createOperationSelector(ActorQuery, {});
-      store.notify = jest.fn(store.notify.bind(store));
-      store.publish = jest.fn(store.publish.bind(store));
+      (store: $FlowFixMe).notify = jest.fn(store.notify.bind(store));
+      (store: $FlowFixMe).publish = jest.fn(store.publish.bind(store));
       environment = new RelayModernEnvironment(config);
     });
 
@@ -433,6 +437,9 @@ describe('RelayModernEnvironment', () => {
           const zuck = proxyStore.get('4');
           if (zuck) {
             const name = zuck.getValue('name');
+            if (typeof name !== 'string') {
+              throw new Error('Expected zuck.name to be defined');
+            }
             zuck.setValue(name.toUpperCase(), 'name');
           }
         },
@@ -496,7 +503,7 @@ describe('RelayModernEnvironment', () => {
           }),
       );
       environment = new RelayModernEnvironment({
-        network: RelayNetwork.create(fetch),
+        network: RelayNetwork.create((fetch: $FlowFixMe)),
         store,
       });
     });
@@ -572,9 +579,10 @@ describe('RelayModernEnvironment', () => {
 
       expect(next.mock.calls.length).toBe(1);
       expect(next).toBeCalledWith({
+        kind: 'data',
         response: payload,
         variables,
-        operation: operation.node.operation,
+        operation: (operation.node: $FlowFixMe).operation,
       });
       expect(complete).toBeCalled();
       expect(error).not.toBeCalled();
@@ -628,7 +636,7 @@ describe('RelayModernEnvironment', () => {
         }),
       );
       environment = new RelayModernEnvironment({
-        network: RelayNetwork.create(fetch),
+        network: RelayNetwork.create((fetch: $FlowFixMe)),
         store,
       });
     });
@@ -723,9 +731,10 @@ describe('RelayModernEnvironment', () => {
 
       expect(next.mock.calls.length).toBe(1);
       expect(next).toBeCalledWith({
+        kind: 'data',
         response: payload,
         variables,
-        operation: operation.node.operation,
+        operation: (operation.node: $FlowFixMe).operation,
       });
       expect(complete).not.toBeCalled();
       expect(error).not.toBeCalled();
@@ -805,6 +814,7 @@ describe('RelayModernEnvironment', () => {
         },
       };
       dataSource.next({
+        kind: 'data',
         operation: query.operation,
         variables,
         response: payload,
@@ -855,6 +865,7 @@ describe('RelayModernEnvironment', () => {
       };
 
       dataSource.next({
+        kind: 'data',
         operation: query.operation,
         variables,
         response: optimisticResponse,
@@ -863,6 +874,7 @@ describe('RelayModernEnvironment', () => {
 
       jest.runAllTimers();
       dataSource.next({
+        kind: 'data',
         operation: query.operation,
         variables,
         response: realResponse,
@@ -906,6 +918,7 @@ describe('RelayModernEnvironment', () => {
         },
       };
       dataSource.next({
+        kind: 'data',
         operation: query.operation,
         variables,
         response: payload,
@@ -1135,8 +1148,18 @@ describe('RelayModernEnvironment', () => {
           operation,
           updater: _store => {
             const comment = _store.get(commentID);
+            if (!comment) {
+              throw new Error('Expected comment to be in the store');
+            }
             const body = comment.getLinkedRecord('body');
-            body.setValue(body.getValue('text').toUpperCase(), 'text');
+            if (!body) {
+              throw new Error('Expected comment to have a body');
+            }
+            const bodyValue: string = (body.getValue('text'): $FlowFixMe);
+            if (bodyValue == null) {
+              throw new Error('Expected comment body to have text');
+            }
+            body.setValue(bodyValue.toUpperCase(), 'text');
           },
         })
         .subscribe(callbacks);

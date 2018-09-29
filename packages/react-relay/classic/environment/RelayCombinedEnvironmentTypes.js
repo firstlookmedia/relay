@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -245,6 +245,18 @@ export interface CUnstableEnvironmentCore<
    * operation (or batch request).
    */
   getRequest: (node: TGraphQLTaggedNode) => TRequest;
+
+  /**
+   * Given a graphql`...` tagged template, returns true if the value is a
+   * fragment definiton, or false otherwise.
+   */
+  isFragment: (node: TGraphQLTaggedNode) => boolean;
+
+  /**
+   * Given a graphql`...` tagged template, returns true if the value is an
+   * operation or batch request (i.e. query), or false otherwise.
+   */
+  isRequest: (node: TGraphQLTaggedNode) => boolean;
 
   /**
    * Determine if two selectors are equal (represent the same selection). Note

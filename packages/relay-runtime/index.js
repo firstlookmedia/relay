@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -11,11 +11,13 @@
 'use strict';
 
 const RelayConcreteNode = require('./util/RelayConcreteNode');
+const RelayConcreteVariables = require('./store/RelayConcreteVariables');
 const RelayConnectionHandler = require('./handlers/connection/RelayConnectionHandler');
 const RelayConnectionInterface = require('./handlers/connection/RelayConnectionInterface');
 const RelayCore = require('./store/RelayCore');
 const RelayDeclarativeMutationConfig = require('./mutations/RelayDeclarativeMutationConfig');
 const RelayDefaultHandleKey = require('./util/RelayDefaultHandleKey');
+const RelayDefaultHandlerProvider = require('./handlers/RelayDefaultHandlerProvider');
 const RelayError = require('./util/RelayError');
 const RelayInMemoryRecordSource = require('./store/RelayInMemoryRecordSource');
 const RelayMarkSweepStore = require('./store/RelayMarkSweepStore');
@@ -63,9 +65,18 @@ export type {
 export type {MutationConfig} from './mutations/commitRelayModernMutation';
 export type {RelayNetworkLog} from './network/RelayNetworkLoggerTransaction';
 export type {
+  EventPayload,
+  ExecuteFunction,
   ExecutePayload,
+  FetchFunction,
   GraphQLResponse,
+  LegacyObserver,
+  Network as INetwork,
+  PayloadData,
   PayloadError,
+  StreamPayload,
+  SubscribeFunction,
+  Uploadable,
   UploadableMap,
 } from './network/RelayNetworkTypes';
 export type {
@@ -81,11 +92,19 @@ export type {
   Environment as IEnvironment,
   FragmentMap,
   FragmentReference,
+  HandleFieldPayload,
+  MissingFieldHandler,
   OperationSelector,
+  OptimisticUpdate,
+  RecordProxy,
+  RecordSourceProxy,
+  RecordSourceSelectorProxy,
   RelayContext,
   Selector,
+  SelectorData,
   SelectorStoreUpdater,
   Snapshot,
+  StoreUpdater,
 } from './store/RelayStoreTypes';
 export type {
   GraphQLSubscriptionConfig,
@@ -109,6 +128,7 @@ export type {
   CacheConfig,
   DataID,
   Disposable,
+  OperationType,
   RerunParam,
   Variables,
 } from './util/RelayRuntimeTypes';
@@ -166,6 +186,7 @@ module.exports = {
   RangeOperations: RelayDeclarativeMutationConfig.RangeOperations,
 
   // Extensions
+  DefaultHandlerProvider: RelayDefaultHandlerProvider,
   ConnectionHandler: RelayConnectionHandler,
   ViewerHandler: RelayViewerHandler,
 
@@ -188,7 +209,12 @@ module.exports = {
   RelayError: RelayError,
   RelayNetworkLoggerTransaction: RelayNetworkLoggerTransaction,
   DEFAULT_HANDLE_KEY: RelayDefaultHandleKey.DEFAULT_HANDLE_KEY,
+  FRAGMENTS_KEY: RelayStoreUtils.FRAGMENTS_KEY,
+  ID_KEY: RelayStoreUtils.ID_KEY,
+  REF_KEY: RelayStoreUtils.REF_KEY,
+  REFS_KEY: RelayStoreUtils.REFS_KEY,
   ROOT_ID: RelayStoreUtils.ROOT_ID,
+  ROOT_TYPE: RelayStoreUtils.ROOT_TYPE,
 
   createRelayNetworkLogger: createRelayNetworkLogger,
   deepFreeze: deepFreeze,
@@ -198,4 +224,7 @@ module.exports = {
   recycleNodesInto: recycleNodesInto,
   simpleClone: simpleClone,
   stableCopy: stableCopy,
+  __internal: {
+    getModernOperationVariables: RelayConcreteVariables.getOperationVariables,
+  },
 };

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -47,8 +47,7 @@ describe('RelayFlowGenerator', () => {
       customScalars: {},
       enumsHasteModule: null,
       existingFragmentNames: new Set(['PhotoFragment']),
-      inputFieldWhiteList: [],
-      relayRuntimeModule: 'relay-runtime',
+      optionalInputFields: [],
       useHaste: true,
       useSingleArtifactDirectory: false,
     }),
@@ -64,8 +63,7 @@ describe('RelayFlowGenerator', () => {
       customScalars: {},
       enumsHasteModule: null,
       existingFragmentNames: new Set(['PhotoFragment']),
-      inputFieldWhiteList: [],
-      relayRuntimeModule: 'relay-runtime',
+      optionalInputFields: [],
       useHaste: true,
       useSingleArtifactDirectory: false,
       // This is what's different from the tests above.
@@ -87,7 +85,6 @@ describe('RelayFlowGenerator', () => {
     const generateWithMapping = mapping =>
       generate(text, {
         customScalars: mapping,
-        relayRuntimeModule: 'relay-runtime',
       });
 
     it('maps unspecified types to `any`', () => {
@@ -127,8 +124,7 @@ describe('RelayFlowGenerator', () => {
       customScalars: {},
       enumsHasteModule: null,
       existingFragmentNames: new Set(['PhotoFragment']),
-      inputFieldWhiteList: [],
-      relayRuntimeModule: 'relay-runtime',
+      optionalInputFields: [],
       // This is what's different from the tests above.
       useHaste: false,
       useSingleArtifactDirectory: true,

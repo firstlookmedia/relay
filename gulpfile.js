@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -18,6 +18,7 @@ const babelOptions = require('./scripts/getBabelOptions')({
     '@babel/parser': '@babel/parser',
     '@babel/types': '@babel/types',
     'babel-core': 'babel-core',
+    'babel-plugin-macros': 'babel-plugin-macros',
     'babel-generator': 'babel-generator',
     'babel-generator/lib/printer': 'babel-generator/lib/printer',
     'babel-polyfill': 'babel-polyfill',
@@ -30,7 +31,6 @@ const babelOptions = require('./scripts/getBabelOptions')({
     'babel-runtime/helpers/possibleConstructorReturn': 'babel-runtime/helpers/possibleConstructorReturn',
     'babel-runtime/helpers/toConsumableArray': 'babel-runtime/helpers/toConsumableArray',
     'babel-traverse': 'babel-traverse',
-    'babel-types': 'babel-types',
     chalk: 'chalk',
     child_process: 'child_process',
     crypto: 'crypto',
@@ -153,6 +153,7 @@ const builds = [
     package: 'babel-plugin-relay',
     exports: {
       index: 'BabelPluginRelay.js',
+      macro: 'BabelPluginRelay.macro.js',
     },
     bundles: [
       {

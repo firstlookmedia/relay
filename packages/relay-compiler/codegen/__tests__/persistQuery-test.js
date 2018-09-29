@@ -16,15 +16,15 @@ describe('persistQuery', () => {
   });
 
   test('should hash and store query correctly', async () => {
-    const queryId = await persistQuery(animalQuery);
-    expect(queryId).toEqual('animalMd5');
+    const documentId = await persistQuery(animalQuery);
+    expect(documentId).toEqual('animalMd5');
   });
 
   test('should hash and store all queries correctly', async () => {
-    const queryId1 = await persistQuery(animalQuery);
-    const queryId2 = await persistQuery(humanQuery);
+    const documentId1 = await persistQuery(animalQuery);
+    const documentId2 = await persistQuery(humanQuery);
 
-    expect(queryId1).toEqual('animalMd5');
-    expect(queryId2).toEqual('humanMd5');
+    expect(documentId1).toEqual('animalMd5');
+    expect(documentId2).toEqual('humanMd5');
   });
 });

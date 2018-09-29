@@ -1,10 +1,10 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * @flow
+ * @flow strict-local
  * @format
  */
 
@@ -75,7 +75,7 @@ export type GraphQLTag = {
   /**
    * The location in the source file that the tag is placed at.
    */
-  sourceLocationOffset: {
+  sourceLocationOffset: {|
     /**
      * The line in the source file that the tag is placed on.
      *
@@ -89,7 +89,7 @@ export type GraphQLTag = {
      * Columns use 1-based indexing.
      */
     column: number,
-  },
+  |},
 };
 
 /**
@@ -146,11 +146,6 @@ export type FormatModule = ({|
   typeText: string,
 
   /**
-   * The name of the relay-runtime module being used.
-   */
-  relayRuntimeModule: string,
-
-  /**
    * A hash of the concrete node including the query text.
    *
    * @todo Document how this is different from `sourceHash`.
@@ -195,13 +190,6 @@ export type TypeGeneratorOptions = {|
   +existingFragmentNames: Set<string>,
 
   /**
-   * The name of the relay-runtime module.
-   *
-   * This defaults to `relay-runtime`.
-   */
-  +relayRuntimeModule: string,
-
-  /**
    * Whether or not relay-compiler will store artifacts next to the module that
    * they originate from or all together in a single directory.
    *
@@ -226,7 +214,7 @@ export type TypeGeneratorOptions = {|
   /**
    * @todo Document this.
    */
-  +inputFieldWhiteList: $ReadOnlyArray<string>,
+  +optionalInputFields: $ReadOnlyArray<string>,
 
   /**
    * Whether or not the Haste module system is being used. This will currently

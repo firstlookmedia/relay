@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -45,7 +45,7 @@ const {
   schemaExtensions,
 } = RelayIRTransforms;
 
-import type {GetWriterOptions} from 'graphql-compiler';
+import type {WriteFilesOptions} from 'graphql-compiler';
 import type {GraphQLSchema} from 'graphql';
 import type {
   PluginInitializer,
@@ -262,7 +262,7 @@ Ensure that one such file exists in ${srcDir} or its parents.
   };
   const writerConfigs = {
     [sourceWriterName]: {
-      getWriter: getRelayFileWriter(
+      writeFiles: getRelayFileWriter(
         srcDir,
         languagePlugin,
         options.noFutureProofEnums,
@@ -317,8 +317,8 @@ function getRelayFileWriter(
     baseDocuments,
     sourceControl,
     reporter,
-  }: GetWriterOptions) =>
-    new RelayFileWriter({
+  }: WriteFilesOptions) =>
+    RelayFileWriter.writeAll({
       config: {
         baseDir,
         compilerTransforms: {
@@ -330,7 +330,7 @@ function getRelayFileWriter(
         },
         customScalars: {},
         formatModule: languagePlugin.formatModule,
-        inputFieldWhiteListForFlow: [],
+        optionalInputFieldsForFlow: [],
         schemaExtensions,
         useHaste: false,
         persistQuery: persist ? persistQuery : undefined,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -13,6 +13,7 @@
 import type {
   ExecutePayload,
   PayloadError,
+  StreamPayload,
   UploadableMap,
 } from '../network/RelayNetworkTypes';
 import type {PayloadData} from '../network/RelayNetworkTypes';
@@ -26,7 +27,12 @@ import type {
   RequestNode,
   ConcreteOperation,
 } from '../util/RelayConcreteNode';
-import type {DataID, Disposable, Variables} from '../util/RelayRuntimeTypes';
+import type {
+  CacheConfig,
+  DataID,
+  Disposable,
+  Variables,
+} from '../util/RelayRuntimeTypes';
 import type {RecordState} from './RelayRecordState';
 import type {
   CEnvironment,
@@ -37,6 +43,10 @@ import type {
   CSnapshot,
   CUnstableEnvironmentCore,
   Record,
+} from 'react-relay/classic/environment/RelayCombinedEnvironmentTypes';
+
+export type {
+  SelectorData,
 } from 'react-relay/classic/environment/RelayCombinedEnvironmentTypes';
 
 // eslint-disable-next-line no-undef
@@ -139,6 +149,12 @@ export interface Store {
     snapshot: Snapshot,
     callback: (snapshot: Snapshot) => void,
   ): Disposable;
+
+  /**
+   * The method should disable garbage collection until
+   * the returned reference is disposed.
+   */
+  holdGC(): Disposable;
 }
 
 /**
@@ -237,6 +253,17 @@ export interface Environment
    * Get the environment's internal Store.
    */
   getStore(): Store;
+
+  /**
+   * Returns an Observable that can also possibly include event payloads.
+   * Contrast this with .execute({...}), which will ignore any events pushed
+   * to the Observable.
+   */
+  executeWithEvents({|
+    operation: OperationSelector,
+    cacheConfig?: ?CacheConfig,
+    updater?: ?SelectorStoreUpdater,
+  |}): RelayObservable<StreamPayload>;
 
   /**
    * Returns an Observable of ExecutePayload resulting from executing the

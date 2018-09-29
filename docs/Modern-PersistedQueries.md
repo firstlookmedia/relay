@@ -85,7 +85,7 @@ The example above writes the complete query map file to `./src/queryMaps/queryMa
 leading to the `queryMap.json` file exist. Also note that the file extension has to be `.json`.
 
 ### Network layer changes
-You'll need to modify your network layer fetch implementation to pass a queryId parameter in the POST body instead of a query parameter:
+You'll need to modify your network layer fetch implementation to pass a documentId parameter in the POST body instead of a query parameter:
 
 ```js
 function fetchQuery(operation, variables,) {
@@ -95,7 +95,7 @@ function fetchQuery(operation, variables,) {
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      queryId: operation.id, // NOTE: pass md5 hash to the server
+      documentId: operation.id, // NOTE: pass md5 hash to the server
       // query: operation.text, // this is now obsolete because text is null
       variables,
     }),
