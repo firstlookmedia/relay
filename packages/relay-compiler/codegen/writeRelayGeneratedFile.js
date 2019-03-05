@@ -16,11 +16,11 @@ const Profiler = require('../core/GraphQLCompilerProfiler');
 const crypto = require('crypto');
 const dedupeJSONStringify = require('../util/dedupeJSONStringify');
 const deepMergeAssignments = require('./deepMergeAssignments');
+const persistGeneratedNode = require('./persistGeneratedNode');
 const invariant = require('invariant');
 
 const {RelayConcreteNode} = require('relay-runtime');
 
-import type {Definition} from '../core/GraphQLIR';
 import type {FormatModule} from '../language/RelayLanguagePluginInterface';
 import type CodegenDirectory from './CodegenDirectory';
 import type {GeneratedNode} from 'relay-runtime';
@@ -45,7 +45,6 @@ function getConcreteType(node: GeneratedNode): string {
 
 async function writeRelayGeneratedFile(
   codegenDir: CodegenDirectory,
-  definition: Definition,
   _generatedNode: GeneratedNode,
   formatModule: FormatModule,
   typeText: string,
@@ -105,31 +104,11 @@ async function writeRelayGeneratedFile(
       return null;
     }
     if (persistQuery) {
-      switch (generatedNode.kind) {
-        case RelayConcreteNode.REQUEST:
-          const {text} = generatedNode.params;
-          invariant(
-            text != null,
-            'writeRelayGeneratedFile: Expected `text` in order to persist query',
-          );
-          devOnlyProperties.params = {text};
-          generatedNode = {
-            ...generatedNode,
-            params: {
-              operationKind: generatedNode.params.operationKind,
-              name: generatedNode.params.name,
-              id: await persistQuery(text, sourceHash),
-              text: null,
-              metadata: generatedNode.params.metadata,
-            },
-          };
-          break;
-        case RelayConcreteNode.FRAGMENT:
-          // Do not persist fragments.
-          break;
-        default:
-          (generatedNode.kind: empty);
-      }
+      generatedNode = await persistGeneratedNode(
+        generatedNode,
+        devOnlyProperties,
+        persistQuery,
+      );
     }
   }
 
@@ -141,7 +120,6 @@ async function writeRelayGeneratedFile(
   const moduleText = formatModule({
     moduleName,
     documentType: typeName,
-    definition,
     kind: generatedNode.kind,
     docText,
     typeText,
